@@ -1,0 +1,48 @@
+version: '3'
+services:
+    web:
+        image: webdevops/php-apache-dev:8.1
+        container_name: web_nola_test
+        restart: "no"
+        user: root
+        environment:
+          - WEB_ALIAS_DOMAIN=nola.test
+          - WEB_DOCUMENT_ROOT=/app
+          - PHP_DATE_TIMEZONE=EST
+          - PHP_DISPLAY_ERRORS=1
+          - PHP_MEMORY_LIMIT=4G
+          - PHP_MAX_EXECUTION_TIME=18000
+          - PHP_POST_MAX_SIZE=500M
+          - PHP_UPLOAD_MAX_FILESIZE=1024M
+          - COMPOSER_VERSION=2
+          - PHP_DEBUGGER=none # comment this parameter to enable xDebug by default
+          - XDEBUG_START_WITH_REQUEST=yes
+          - XDEBUG_REMOTE_HOST=host.docker.internal
+          - XDEBUG_REMOTE_PORT=9000
+          - XDEBUG_REMOTE_CONNECT_BACK=0
+          - XDEBUG_REMOTE_AUTOSTART=1
+          # - POSTFIX_RELAYHOST=[mailhog_atlantis]:1025
+        volumes:
+          - ./:/app:cached
+        ports:
+          - "80:80"
+          - "443:443"
+          - "32823:22"
+        links:
+          - mysql8
+    mysql8:
+        image: mysql:8
+        container_name: mysql8_nola_test
+        restart: "no"
+        ports:
+          - "3306:3306"
+        environment:
+          - MYSQL_ROOT_PASSWORD=root
+          - MYSQL_DATABASE=db_nola
+    mailhog:  # Emails can be viisualize at http://localhost:8025/
+        image: mailhog/mailhog
+        container_name: mailhog_nola_test
+        ports:
+          - 1025:1025
+          - 8025:8025
+
