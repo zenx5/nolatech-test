@@ -44,10 +44,12 @@ class ApiLogForm {
     public static function add_endpoints(){
         register_rest_route("nolatech/v1", 'logs', array(
             'methods' => 'get',
+            'permission_callback' => '__return_true',
             'callback' => [__CLASS__, 'get_logs']
         ));
         register_rest_route("nolatech/v1", 'logs', array(
             'methods' => 'post',
+            'permission_callback' => '__return_true',
             'callback' => [__CLASS__, 'set_log']
         ));
     }
