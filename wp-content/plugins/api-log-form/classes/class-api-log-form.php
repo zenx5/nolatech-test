@@ -22,23 +22,28 @@ class ApiLogForm {
     }
 
     public static function new_record($record, $handler ) {
-        $form_name = $record->get_form_settings( 'form_name' );
-        if ( 'new_log' !== $form_name ) {
-            return;
-        }
+        try {
+            $form_name = $record->get_form_settings( 'form_name' );
+            if ( 'new_log' !== $form_name ) {
+                return;
+            }
 
-        $raw_fields = $record->get( 'fields' );
-        $fields = [];
-        foreach ( $raw_fields as $id => $field ) {
-            $fields[ $id ] = $field['value'];
+            $raw_fields = $record->get( 'fields' );
+            $fields = [];
+            foreach ( $raw_fields as $id => $field ) {
+                $fields[ $id ] = $field['value'];
+            }
+
+            wp_remote_post(
+                get_site_url().'/wp-json/nolatech/v1/logs',
+                [
+                    'body' => $fields,
+                ]
+            );
+        } catch( Exception $error ) {
+            echo $error->getMessage();
+            return false;
         }
-        echo json_encode( $fields );
-        wp_remote_post(
-            get_site_url().'/wp-json/nolatech/v1/logs',
-            [
-                'body' => $fields,
-            ]
-        );
     }
 
     public static function add_endpoints(){
