@@ -55,7 +55,11 @@ class ApiLogForm {
     }
 
     public static function get_logs() {
-        return json_decode( get_option('logs', '[]') );
+        $logs = json_decode( get_option('logs', '[]') );
+        return [
+            "host" => get_site_url(),
+            "data" => $logs
+        ];
     }
 
     public static function set_log() {
