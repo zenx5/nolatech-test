@@ -63,21 +63,26 @@ class ApiLogForm {
     }
 
     public static function set_log() {
-        $data = [
-            "name" => $_POST['name'],
-            "surname" => $_POST['surname'],
-            "phone" => $_POST['phone'],
-            "email" => $_POST['email'],
-            "departament" => $_POST['departament'],
-            "message" => $_POST['message']
-        ];
-        $logs = json_decode( get_option('logs', '[]') );
-        $count = json_decode( get_option('count_logs', 0) );
-        $logs[] = $data;
-        update_option('logs', json_encode( $logs ) );
-        update_option('count_logs', $count + 1 );
-        echo json_encode( "HERE" );
-        return true;
+        try {
+            $data = [
+                "name" => $_POST['name'],
+                "surname" => $_POST['surname'],
+                "phone" => $_POST['phone'],
+                "email" => $_POST['email'],
+                "departament" => $_POST['departament'],
+                "message" => $_POST['message']
+            ];
+            $logs = json_decode( get_option('logs', '[]') );
+            $count = json_decode( get_option('count_logs', 0) );
+            $logs[] = $data;
+            update_option('logs', json_encode( $logs ) );
+            update_option('count_logs', $count + 1 );
+            return true;
+        } catch( Exception $error ) {
+            echo $error->getMessage();
+            return false;
+        }
+        
     }
 
 }
