@@ -23,6 +23,7 @@ class ApiLogForm {
 
     public static function new_record($record, $handler ) {
         $form_name = $record->get_form_settings( 'form_name' );
+        die( $form_name );
         if ( 'new_log' !== $form_name ) {
             return;
         }
