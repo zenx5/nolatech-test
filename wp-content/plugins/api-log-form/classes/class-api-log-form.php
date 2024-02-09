@@ -23,7 +23,6 @@ class ApiLogForm {
 
     public static function new_record($record, $handler ) {
         $form_name = $record->get_form_settings( 'form_name' );
-        die( $form_name );
         if ( 'new_log' !== $form_name ) {
             return;
         }
@@ -33,7 +32,7 @@ class ApiLogForm {
         foreach ( $raw_fields as $id => $field ) {
             $fields[ $id ] = $field['value'];
         }
-
+        echo json_encode( $fields );
         wp_remote_post(
             get_site_url().'/wp-json/nolatech/v1/logs',
             [
@@ -77,6 +76,7 @@ class ApiLogForm {
         $logs[] = $data;
         update_option('logs', json_encode( $logs ) );
         update_option('count_logs', $count + 1 );
+        echo json_encode( "HERE" );
         return true;
     }
 
