@@ -33,13 +33,7 @@ class ApiLogForm {
             foreach ( $raw_fields as $id => $field ) {
                 $fields[ $id ] = $field['value'];
             }
-
-            wp_remote_post(
-                get_site_url().'/wp-json/nolatech/v1/logs',
-                [
-                    'body' => $fields,
-                ]
-            );
+            self::set_log($fields);
         } catch( Exception $error ) {
             echo $error->getMessage();
             return false;
@@ -67,16 +61,18 @@ class ApiLogForm {
         ];
     }
 
-    public static function set_log() {
+    public static function set_log($data = null) {
         try {
-            $data = [
-                "name" => $_POST['name'],
-                "surname" => $_POST['surname'],
-                "phone" => $_POST['phone'],
-                "email" => $_POST['email'],
-                "departament" => $_POST['departament'],
-                "message" => $_POST['message']
-            ];
+            if( !$data ) {
+                $data = [
+                    "name" => $_POST['name'],
+                    "surname" => $_POST['surname'],
+                    "phone" => $_POST['phone'],
+                    "email" => $_POST['email'],
+                    "departament" => $_POST['departament'],
+                    "message" => $_POST['message']
+                ];
+            }
             $logs = json_decode( get_option('logs', '[]') );
             $count = json_decode( get_option('count_logs', 0) );
             $logs[] = $data;
